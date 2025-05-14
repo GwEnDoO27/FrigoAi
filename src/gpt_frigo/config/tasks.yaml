@@ -1,0 +1,9 @@
+recommandation_task:
+  description: >
+    Tu as accès aux recettes dans le fichier JSON via l'outil.
+    Voici les ingrédients disponibles dans le frigo : {frigo_str}.
+    Cherche et retourne uniquement les recettes qui peuvent être faites avec ces ingrédients.
+    Ne propose pas celles qui nécessitent d'autres ingrédients.
+  agent: agent_recettes
+  expected_output: >
+    Une liste de recettes réalisables uniquement avec les ingrédients fournis, au format markdown (nom, ingrédients, étapes).

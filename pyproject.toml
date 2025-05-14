@@ -1,0 +1,23 @@
+[project]
+name = "gpt_frigo"
+version = "0.1.0"
+description = "gpt_frigo using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.119.0,<1.0.0"
+]
+
+[project.scripts]
+gpt_frigo = "gpt_frigo.main:run"
+run_crew = "gpt_frigo.main:run"
+train = "gpt_frigo.main:train"
+replay = "gpt_frigo.main:replay"
+test = "gpt_frigo.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
