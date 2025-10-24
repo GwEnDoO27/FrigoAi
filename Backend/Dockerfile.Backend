@@ -1,0 +1,36 @@
+FROM golang:1.24.4-alpine AS builder
+
+RUN apk add --no-cache sqlite-dev gcc musl-dev
+
+# Définition du répertoire de travail
+WORKDIR /app
+
+# Copie des fichiers go mod et sum
+COPY go.mod go.sum ./
+
+# Copie du code source
+COPY . .
+
+# Compilation de l'application avec Cgo activé
+RUN CGO_ENABLED=1 GOOS=linux go build -o main ./cmd
+
+# Stage final
+FROM alpine:latest
+
+# Installation de SQLite, ca-certificates et wget pour healthcheck
+RUN apk add --no-cache sqlite ca-certificates wget
+
+# Définition du répertoire de travail
+WORKDIR /app
+
+# Copie du binaire compilé depuis l'étape builder
+COPY --from=builder /app/main .
+
+# Création des répertoires nécessaires
+RUN mkdir -p /app/uploads /app/db
+
+# Exposition du port
+EXPOSE 8001
+
+# Lancer l'application
+CMD ["./main"]

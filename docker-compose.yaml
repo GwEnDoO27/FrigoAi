@@ -1,0 +1,40 @@
+services:
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.Frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - fassist-net
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.Backend
+    ports:
+      - "8001:8001"
+    networks:
+      - fassist-net
+    volumes:
+      - backend-uploads:/app/uploads
+      - backend-db:/app/db
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8001/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  fassist-net:
+    driver: bridge
+
+volumes:
+  backend-uploads:
+  backend-db:
